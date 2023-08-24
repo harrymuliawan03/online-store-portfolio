@@ -1,0 +1,43 @@
+.page-auth {
+  .row-login {
+    min-height: 75vh;
+  }
+  .section-store-auth {
+    h2 {
+      color: #0c0d36;
+      font-size: 28px;
+      font-weight: 400;
+      margin-top: 0px;
+
+      @include media-breakpoint-down(sm) {
+        font-size: 20px;
+        text-align: center;
+      }
+    }
+
+    .form-control {
+      border-radius: 8px;
+      background: #f3f3f3;
+    }
+
+    .form-login {
+      @include media-breakpoint-down(lg) {
+        display: flex;
+        flex-direction: column;
+        background-color: #fff !important;
+
+        button {
+          width: 100% !important;
+        }
+        input {
+          width: 100% !important;
+        }
+      }
+    }
+
+    .btn-signup {
+      @include button-variant(#f3f3f3, transparent);
+      color: #bbb;
+    }
+  }
+}
