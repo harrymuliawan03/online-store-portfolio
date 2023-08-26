@@ -42,7 +42,7 @@ class DashboardController extends Controller
                     return $total;
                 })
                 ->editColumn('total_amount', function($item) {
-                    return $item->transaction->total_price;
+                    return 'Rp. '. number_format($item->transaction->total_price) .'';
                 })
                 ->editColumn('created_at', function($item) {
                     return $item->created_at->format('d-M-Y') ;
@@ -73,7 +73,12 @@ class DashboardController extends Controller
         $trx= TransactionDetail::whereHas('product', fn($query) => $query
                                     ->where('users_id', auth()->user()->id));
         $data['sell_products'] = $trx->get()->count();
-        $data['revenue'] = $trx->sum('price');
+        $trx_get = $trx->get();
+        $revenue = 0;
+        foreach ($trx_get as $item) {
+            $revenue += $item->qty * $item->price - ($item->qty * $item->price * 2 / 100); // get the total with tax deduction
+        }
+        $data['revenue'] = $revenue;
         $data['transaction'] = Transaction::where('users_id', auth()->user()->id)->sum('total_price');
         $data['user'] = User::findOrFail(auth()->user()->id);
         $data['belum_proses'] = $trx->whereHas('transaction', fn($query) => $query->where('transaction_status', 'PENDING'))->get()->unique('transactions_id')->count();
@@ -95,10 +100,20 @@ class DashboardController extends Controller
         $user = User::findOrFail(auth()->user()->id);
         $user->update($data);
         
-        return redirect()->route('dashboard-settings');
+        return redirect()->route('dashboard-settings', [
+            'user' => $user
+        ]);
     }
     public function account()
     {
-        return view('pages.dashboard-account');
+        $data['user'] = User::findOrFail(auth()->user()->id);
+        return view('pages.dashboard-account', $data);
+    }
+    public function updateAccount(Request $request)
+    {
+        $data = $request->all();
+        $user = User::findOrFail(auth()->user()->id);
+        $user->update($data);
+        return redirect()->route('dashboard-account');
     }
 }

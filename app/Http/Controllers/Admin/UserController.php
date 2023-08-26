@@ -20,15 +20,17 @@ class UserController extends Controller
 
             return DataTables::of($query)
                 ->addColumn('action', function($item) {
-                    return '
-                        <div class="btn-group">
-                            <a href="'. route('user.edit', $item->id) .'" class="btn btn-primary border-0 mr-1">Edit</a>
-                            <form action="'. route('user.destroy', $item->id) .'" method="POST" id="form'. $item->id .'">
-                                        '. method_field('delete') . csrf_field() .'
-                                        <button type="button" class="btn btn-danger border-0 modalDelete" data-id="'. $item->id .'">Delete</button>
-                            </form>
-                        </div>
-                    ';
+                    if($item->roles != "ADMIN") {
+                        return '
+                            <div class="btn-group">
+                                <a href="'. route('user.edit', $item->id) .'" class="btn btn-primary border-0 mr-1">Edit</a>
+                                <form action="'. route('user.destroy', $item->id) .'" method="POST" id="form'. $item->id .'">
+                                            '. method_field('delete') . csrf_field() .'
+                                            <button type="button" class="btn btn-danger border-0 modalDelete" data-id="'. $item->id .'">Delete</button>
+                                </form>
+                            </div>
+                        ';
+                    }
                 })
                 ->rawColumns(['action'])
                 ->make();

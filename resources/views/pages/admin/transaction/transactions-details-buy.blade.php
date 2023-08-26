@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 
 @section('title')
     Transactions Details
@@ -106,7 +106,7 @@
                                                             <div class="product-subtitle">Apakah produk sudah diterima ? </div>
                                                         </div>
                                                         <div class="col-12 col-md-6 mt-4">
-                                                            <a href="{{ route('delivered', $buy->transaction->id) }}" class="btn btn-success mx-2">Sudah</a>
+                                                            <a href="{{ route('admin-delivered', $buy->transaction->id) }}" class="btn btn-success mx-2">Sudah</a>
                                                             <button class="btn btn-danger">Belum</button>
                                                         </div>
                                                         @endif

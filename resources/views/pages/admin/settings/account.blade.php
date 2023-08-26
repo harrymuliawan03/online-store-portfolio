@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 
 @section('title')
     Store Dashboard
@@ -16,7 +16,7 @@
                 <div class="dashboard-content">
                     <div class="row">
                         <div class="col-12">
-                            <form action="{{ route('update-account') }}" id="locations" method="POST">
+                            <form action="{{ route('admin-update-account') }}" id="locations" method="POST">
                                 @csrf
                             <div class="card">
                                 <div class="card-body">

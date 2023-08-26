@@ -22,5 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('register/check', [RegisterController::class, 'check'])->name('api-register-check');
+Route::get('stock/check', [CartStockController::class, 'check']);
 Route::get('provinces', [LocationController::class, 'provinces'])->name('api-provinces');
 Route::get('regencies/{provinces_id}', [LocationController::class, 'regencies'])->name('api-regencies');

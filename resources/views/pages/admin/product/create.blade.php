@@ -36,10 +36,16 @@
                                                 <input type="text" name="name" class="form-control"/>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Price</label>
-                                                <input type="number" name="price" value="$100.00" class="form-control">
+                                                <input type="number" name="price"  class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Stock</label>
+                                                <input type="number" min="0" name="stock"  class="form-control">
                                             </div>
                                         </div>
 

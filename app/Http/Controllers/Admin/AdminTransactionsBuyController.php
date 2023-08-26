@@ -1,27 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\TransactionDetail;
+
 use App\Models\Transaction;
+use App\Models\TransactionDetail;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
-class DashboardTransactionsSellController extends Controller
+class AdminTransactionsBuyController extends Controller
 {
     public function index()
     {
         if(request()->ajax())
         {
             $query = TransactionDetail::with(['transaction', 'product'])
-                                        ->whereHas('product', fn($query) => $query->where('users_id', auth()->user()->id))
-                                        ->whereHas('transaction', fn($query) => $query->where('users_id', '!=', auth()->user()->id)->where('payment_status', 'SUCCESS'))->get()->unique('transactions_id');
+                                        ->whereHas('product', fn($query) => $query->where('users_id', '!=' , auth()->user()->id))
+                                        ->whereHas('transaction', fn($query) => $query->where('users_id', auth()->user()->id))->get()->unique('transactions_id');
             return DataTables::of($query)
                 ->addColumn('action', function($item) {
                     return '
                         <div class="btn-group">
-                            <a href="'. route('transactions-sell-detail', $item->transaction->id) .'" class="btn btn-primary border-0 mr-1"> > </a>
+                            <a href="'. route('admin-transactions-buy-detail', $item->transaction->id) .'" class="btn btn-primary border-0 mr-1"> > </a>
                         </div>
                     ';
                 })
@@ -32,9 +34,6 @@ class DashboardTransactionsSellController extends Controller
                 })
                 ->editColumn('product_name', function($item) {
                     return $item->product->name;
-                })
-                ->editColumn('buyer', function($item) {
-                    return $item->transaction->user->name;
                 })
                 ->editColumn('total_products', function($item) {
                     $total = TransactionDetail::where('transactions_id', $item->transactions_id)->get()->count();
@@ -68,28 +67,24 @@ class DashboardTransactionsSellController extends Controller
                         </div>
                     ';
                 })
-                ->rawColumns(['action', 'image', 'product_name', 'buyer', 'total_products', 'total_amount', 'awb', 'status', 'created_at','code_trx'])
+                ->rawColumns(['action', 'image', 'product_name', 'total_products', 'total_amount', 'awb', 'status', 'created_at' ,'code_trx'])
                 ->make();
         }
-        return view('pages.dashboard-transactions-sell');
+        return view('pages.admin.transaction.transactions-buy');
     }
     public function detail($id)
     {
-        $data['sell'] = TransactionDetail::with(['transaction.user', 'product.galleries'])->where('transactions_id', $id)->firstOrFail();
+        $data['buy'] = TransactionDetail::with(['transaction.user', 'product.galleries'])->where('transactions_id', $id)->firstOrFail();
         $data['details'] = TransactionDetail::with(['transaction', 'product.galleries'])
-                                                ->whereHas('product', fn($query) => $query->where('users_id', auth()->user()->id))
-                                                ->whereHas('transaction', fn($query) => $query->where('id', $id))->get();
-        
-        return view('pages.dashboard-transactions-details-sell', $data);
+                                                ->where('transactions_id', $id)
+                                                ->whereHas('product', fn($query) => $query->where('users_id', '!=', auth()->user()->id))
+                                                ->whereHas('transaction', fn($query) => $query->where('users_id', auth()->user()->id))->get();
+        return view('pages.admin.transaction.transactions-details-buy', $data);
     }
-
-    public function update(Request $request, $id)
+    public function delivered($id)
     {
-        $data = $request->all();
-        $item = Transaction::findOrFail($id);
-        
-        $item->update($data);
-        
-        return redirect()->route('transactions-sell');
+        $trx = Transaction::findOrFail($id);
+        $trx->update(['transaction_status' => 'SUCCESS']);
+        return redirect()->route('admin-transactions-buy');
     }
 }

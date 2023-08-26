@@ -9664,6 +9664,10 @@ footer p {
   font-weight: 600;
 }
 
+.bg-admin {
+  background: lavender;
+}
+
 .component-categories {
   background: #f4f4f4;
   border-radius: 8px;

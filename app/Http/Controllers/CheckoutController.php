@@ -42,7 +42,8 @@ class CheckoutController extends Controller
             'insurance_price' => 0,
             'shipping_price' => 0,
             'total_price' => $request->total_price,
-            'payment_status' => 'PENDING',
+            'service_fee' => $request->total_price * 2 / 100,
+            'payment_status' => 'SUCCESS',
             'transaction_status' => 'PENDING',
             'code' => $code,
         ]);

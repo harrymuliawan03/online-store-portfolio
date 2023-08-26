@@ -14,6 +14,7 @@ class Transaction extends Model
         'users_id',
         'insurance_price',
         'shipping_price',
+        'service_fee',
         'payment_status',
         'transaction_status',
         'awb',

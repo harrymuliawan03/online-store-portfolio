@@ -1,14 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use Dompdf\Dompdf;
+
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\TransactionDetail;
-use App\Models\Transaction;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
-class DashboardTransactionsSellController extends Controller
+class AdminTransactionsSellController extends Controller
 {
     public function index()
     {
@@ -21,7 +24,7 @@ class DashboardTransactionsSellController extends Controller
                 ->addColumn('action', function($item) {
                     return '
                         <div class="btn-group">
-                            <a href="'. route('transactions-sell-detail', $item->transaction->id) .'" class="btn btn-primary border-0 mr-1"> > </a>
+                            <a href="'. route('admin-transactions-sell-detail', $item->transaction->id) .'" class="btn btn-primary border-0 mr-1"> > </a>
                         </div>
                     ';
                 })
@@ -71,7 +74,7 @@ class DashboardTransactionsSellController extends Controller
                 ->rawColumns(['action', 'image', 'product_name', 'buyer', 'total_products', 'total_amount', 'awb', 'status', 'created_at','code_trx'])
                 ->make();
         }
-        return view('pages.dashboard-transactions-sell');
+        return view('pages.admin.transaction.transactions-sell');
     }
     public function detail($id)
     {
@@ -80,7 +83,7 @@ class DashboardTransactionsSellController extends Controller
                                                 ->whereHas('product', fn($query) => $query->where('users_id', auth()->user()->id))
                                                 ->whereHas('transaction', fn($query) => $query->where('id', $id))->get();
         
-        return view('pages.dashboard-transactions-details-sell', $data);
+        return view('pages.admin.transaction.transactions-details-sell', $data);
     }
 
     public function update(Request $request, $id)
@@ -90,6 +93,16 @@ class DashboardTransactionsSellController extends Controller
         
         $item->update($data);
         
-        return redirect()->route('transactions-sell');
+        return redirect()->route('admin-transactions-sell');
+    }
+
+    public function cetak()
+    {
+        $data['transactions'] = TransactionDetail::with(['transaction', 'product'])
+                                                    ->whereHas('product', fn($query) => $query->where('users_id', auth()->user()->id))->get();
+        $data['details'] = TransactionDetail::with(['transaction', 'product'])
+                                                    ->whereHas('product', fn($query) => $query->where('users_id', auth()->user()->id))->get()->unique('transactions_id');
+            return view('pages.admin.transaction.transaction-sell-pdf', $data);
+            // return $pdf->download('laporan-transaction-sell.pdf');
     }
 }

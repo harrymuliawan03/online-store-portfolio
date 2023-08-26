@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DetailController;
+use App\Http\Controllers\RewardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
@@ -15,6 +16,8 @@ use App\Http\Controllers\DashboardProductsController;
 use App\Http\Controllers\Admin\ProductGalleryController;
 use App\Http\Controllers\DashboardTransactionsBuyController;
 use App\Http\Controllers\DashboardTransactionsSellController;
+use App\Http\Controllers\Admin\AdminTransactionsBuyController;
+use App\Http\Controllers\Admin\AdminTransactionsSellController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
@@ -32,6 +35,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
 Route::get('/categories/{slug}', [CategoryController::class, 'detail'])->name('categories-detail');
+
+Route::get('/rewards', [RewardController::class, 'index'])->name('rewards');
 
 Route::get('/details/{id}', [DetailController::class, 'index'])->name('detail');
 
@@ -68,6 +73,7 @@ Route::group(['middleware' => ['auth', 'user']], function() {
     Route::post('/dashboard/transactions/sell/{id}', [DashboardTransactionsSellController::class, 'update'])->name('transactions-sell-update');
     Route::get('/dashboard/transactions/sell/{id}', [DashboardTransactionsSellController::class, 'detail'])->name('transactions-sell-detail');
     
+    
     Route::get('/dashboard/transactions/buy', [DashboardTransactionsBuyController::class, 'index'])->name('transactions-buy');
     Route::get('/dashboard/transactions/buy/{id}', [DashboardTransactionsBuyController::class, 'detail'])->name('transactions-buy-detail');
     Route::get('/dashboard/transactions/buy/delivered/{id}', [DashboardTransactionsBuyController::class, 'delivered'])->name('delivered');
@@ -75,6 +81,7 @@ Route::group(['middleware' => ['auth', 'user']], function() {
     Route::get('/dashboard/settings', [DashboardController::class, 'settings'])->name('dashboard-settings');
     Route::post('/dashboard/settings/update', [DashboardController::class, 'updateSettings'])->name('update-settings');
     Route::get('/dashboard/account', [DashboardController::class, 'account'])->name('dashboard-account');
+    Route::post('/dashboard/account/update/', [DashboardController::class, 'updateAccount'])->name('update-account');
 });
 
     // ->middleware(['auth', 'admin'])
@@ -89,6 +96,21 @@ Route::prefix('admin')
         Route::resource('product', ProductController::class);
         Route::get('/getFormProduct/{id}', [ProductController::class, 'getFormProduct'])->name('getFormProduct');
         Route::resource('product-gallery', ProductGalleryController::class)->only(['index', 'create', 'store', 'destroy']);
+
+        Route::get('/transactions/sell', [AdminTransactionsSellController::class, 'index'])->name('admin-transactions-sell');
+        Route::post('/transactions/sell/{id}', [AdminTransactionsSellController::class, 'update'])->name('admin-transactions-sell-update');
+        Route::get('/transactions/sell/{id}', [AdminTransactionsSellController::class, 'detail'])->name('admin-transactions-sell-detail');
+        Route::get('/transactions/sell-cetak', [AdminTransactionsSellController::class, 'cetak'])->name('admin-transactions-sell-print');
+        
+        Route::get('/transactions/buy', [AdminTransactionsBuyController::class, 'index'])->name('admin-transactions-buy');
+        Route::get('/transactions/buy/{id}', [AdminTransactionsBuyController::class, 'detail'])->name('admin-transactions-buy-detail');
+        Route::get('/transactions/buy/delivered/{id}', [AdminTransactionsBuyController::class, 'delivered'])->name('admin-delivered');
+
+        
+        Route::get('/settings', [AdminDashboardController::class, 'settings'])->name('admin-settings');
+        Route::post('/settings/update', [AdminDashboardController::class, 'updateSettings'])->name('admin-update-settings');
+        Route::get('/account', [AdminDashboardController::class, 'account'])->name('admin-account');
+        Route::post('/account/update/', [AdminDashboardController::class, 'updateAccount'])->name('admin-update-account');
     });
     
 Auth::routes();

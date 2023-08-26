@@ -46,26 +46,28 @@
 
 @push('addon-script')
     <script>
-        var dataTable = $('#crudTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ordering: true,
-            ajax: {
-                url: '{!! url()->current() !!}',
-            },
-            columns: [
-                {data: 'id', name: 'id'},
-                {data: 'name', name: 'name'},
-                {data: 'photo', name: 'photo'},
-                {data: 'slug', name: 'slug'},
-                {
-                    data: 'action', 
-                    name: 'action',
-                    orderable: false,
-                    searcable: false,
-                    width: '15%'
+        $(document).ready(function(){
+            var dataTable = $('#crudTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ordering: true,
+                ajax: {
+                    url: '{!! url()->current() !!}',
                 },
-            ]
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'photo', name: 'photo'},
+                    {data: 'slug', name: 'slug'},
+                    {
+                        data: 'action', 
+                        name: 'action',
+                        orderable: false,
+                        searcable: false,
+                        width: '15%'
+                    },
+                ]
+            });
         });
     </script>
 @endpush

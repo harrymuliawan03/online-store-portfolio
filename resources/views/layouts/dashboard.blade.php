@@ -25,7 +25,9 @@
         <!-- Sidebar -->
         <div class="border-right" id="sidebar-wrapper">
         <div class="sidebar-heading text-center">
-            <img src="/images/dashboard-store-logo.svg" alt="" class="my-4">
+            <a href="{{ route('home') }}">
+                <img src="/images/dashboard-store-logo.svg" alt="" class="my-4">
+            </a>
         </div>
         <div class="list-group list-group-flush">
             <a href="{{ route('dashboard') }}" class="list-group-item list-group-item-action {{ (request()->is('dashboard')) ? 'active' : '' }}">
@@ -37,7 +39,7 @@
             <a href="{{ route('transactions-sell') }}" class="list-group-item list-group-item-action {{ (request()->is('dashboard/transactions/sell*')) ? 'active' : '' }}">
             Transactions - Sells
             </a>
-            <a href="{{ route('transactions-buy') }}" class="list-group-item list-group-item-action {{ (request()->is('dashboard/transactions/buy')) ? 'active' : '' }}">
+            <a href="{{ route('transactions-buy') }}" class="list-group-item list-group-item-action {{ (request()->is('dashboard/transactions/buy*')) ? 'active' : '' }}">
             Transactions - Buy
             </a>
             <a href="{{ route('dashboard-settings') }}" class="list-group-item list-group-item-action {{ (request()->is('dashboard/settings')) ? 'active' : '' }}">

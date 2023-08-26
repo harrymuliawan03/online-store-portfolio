@@ -68,42 +68,45 @@
 
     {{-- Script Datatable --}}
     <script>
-        var dataTable = $('#crudTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ordering: true,
-            ajax: {
-                url: '{!! url()->current() !!}',
-            },
-            columns: [
-                {data: 'id', name: 'id'},
-                {data: 'product.name', name: 'product.name'},
-                {data: 'photos', name: 'photos'},
-                {
-                    data: 'action', 
-                    name: 'action',
-                    orderable: false,
-                    searcable: false,
-                    width: '15%'
+
+        $(document).ready(function(){
+
+            var dataTable = $('#crudTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ordering: true,
+                ajax: {
+                    url: '{!! url()->current() !!}',
                 },
-            ]
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'product.name', name: 'product.name'},
+                    {data: 'photos', name: 'photos'},
+                    {
+                        data: 'action', 
+                        name: 'action',
+                        orderable: false,
+                        searcable: false,
+                        width: '15%'
+                    },
+                ]
+            });
+
+            $('#crudTable').on('click','.modalDelete',function(){
+                $('#modal-dialog').modal('show');
+                
+            });
+            $('#btnYes').click(function() {
+                // handle form processing here
+                $('form').submit();
+            });
+            
         });
 
     </script>
 
     <!-- Script Action -->
     <script>
-    $(document).ready(function(){
-
-        $('#crudTable').on('click','.modalDelete',function(){
-            $('#modal-dialog').modal('show');
-            
-        });
-        $('#btnYes').click(function() {
-            // handle form processing here
-            $('form').submit();
-        });
-        
-    });
+    
     </script>
 @endpush

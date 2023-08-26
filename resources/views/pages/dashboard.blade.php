@@ -34,7 +34,7 @@
                         Revenue
                         </div>
                         <div class="dashboard-card-subtitle">
-                        {{ number_format($revenue) }}
+                        Rp. {{ number_format($revenue) }}
                         </div>
                     </div>
                     </div>
@@ -46,7 +46,7 @@
                         Transaction
                         </div>
                         <div class="dashboard-card-subtitle">
-                        {{ number_format($transaction) }}
+                        Rp. {{ number_format($transaction) }}
                         </div>
                     </div>
                     </div>
@@ -114,7 +114,7 @@
                         searcable: false,
                         width: '15%'
                     },
-                ]
+                ],
             });
         });
     </script>

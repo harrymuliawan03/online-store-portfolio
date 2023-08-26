@@ -25,7 +25,9 @@
         <!-- Sidebar -->
         <div class="border-right" id="sidebar-wrapper">
         <div class="sidebar-heading text-center">
-            <img src="/images/admin.png" alt="" class="my-4" style="width: 150px;">
+            <a href="{{ route('home') }}">
+                <img src="/images/admin.png" alt="" class="my-4" style="width: 150px;">
+            </a>
         </div>
         <div class="list-group list-group-flush">
             <a href="{{ route('admin-dashboard') }}" class="list-group-item list-group-item-action {{ (request()->is('admin')) ? 'active' : '' }}">
@@ -40,11 +42,20 @@
             <a href="{{ route('category.index') }}" class="list-group-item list-group-item-action {{ (request()->is('admin/category*')) ? 'active' : '' }}">
             Categories
             </a>
-            <a href="" class="list-group-item list-group-item-action">
-            Transactions
+            <a href="{{ route('admin-transactions-sell') }}" class="list-group-item list-group-item-action {{ (request()->is('admin/transactions/sell*')) ? 'active' : '' }}">
+            Transactions - Sells
+            </a>
+            <a href="{{ route('admin-transactions-buy') }}" class="list-group-item list-group-item-action {{ (request()->is('admin/transactions/buy*')) ? 'active' : '' }}">
+            Transactions - Buy
             </a>
             <a href="{{ route('user.index') }}" class="list-group-item list-group-item-action {{ (request()->is('admin/user*')) ? 'active' : '' }}">
             Users
+            </a>
+            <a href="{{ route('admin-settings') }}" class="list-group-item list-group-item-action {{ (request()->is('admin/settings*')) ? 'active' : '' }}">
+            Store Settings
+            </a>
+            <a href="{{ route('admin-account') }}" class="list-group-item list-group-item-action {{ (request()->is('admin/account*')) ? 'active' : '' }}">
+            My Account
             </a>
             <a href="{{ route('logout') }}" 
                     onclick="event.preventDefault();
@@ -59,7 +70,7 @@
         <!-- End sidebar -->
 
         <!-- Page Content -->
-        <div id="page-content-wrapper">
+        <div id="page-content-wrapper" class="bg-admin" style="background: lavender">
         <nav class="navbar navbar-expand-lg navbar-light navbar-store fixed-top" data-aos="fade-down">
             <div class="container-fluid">
             <button class="btn btn-secondary d-md-none mr-auto mr-2" id="menu-toggle">

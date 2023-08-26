@@ -67,63 +67,61 @@
 
 @push('addon-script')
     <script>
-        var dataTable = $('#crudTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ordering: true,
-            ajax: {
-                url: '{!! url()->current() !!}',
-            },
-            columns: [
-                {data: 'id', name: 'id'},
-                {data: 'name', name: 'name'},
-                {data: 'email', name: 'email'},
-                {data: 'roles', name: 'roles'},
-                {
-                    data: 'action', 
-                    name: 'action',
-                    orderable: false,
-                    searcable: false,
-                    width: '15%'
+
+        $(document).ready(function(){
+
+            var dataTable = $('#crudTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ordering: true,
+                ajax: {
+                    url: '{!! url()->current() !!}',
                 },
-            ]
-        });
-
-    </script>
-
-        <!-- Script -->
-    <script>
-    $(document).ready(function(){
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'email', name: 'email'},
+                    {data: 'roles', name: 'roles'},
+                    {
+                        data: 'action', 
+                        name: 'action',
+                        orderable: false,
+                        searcable: false,
+                        width: '15%'
+                    },
+                ]
+            });
 
         $('#crudTable').on('click','.modalDelete',function(){
-            var id = $(this).attr('data-id');
+                var id = $(this).attr('data-id');
+                if(id > 0){
+                    // AJAX request
+                    var url = "{{ route('getUserName',[':id']) }}";
+                    url = url.replace(':id',id);
+                    $('#modal-dialog p span').empty();
+                    $.ajax({
+                        url: url,
+                        dataType: 'json',
+                        success: function(response){
+                            // Add employee details
+                            $('#modal-dialog p span').html(response.html);
+                            
 
-            if(id > 0){
-                // AJAX request
-                var url = "{{ route('getUserName',[':id']) }}";
-                url = url.replace(':id',id);
-                $('#modal-dialog p span').empty();
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    success: function(response){
-                        // Add employee details
-                        $('#modal-dialog p span').html(response.html);
-                        
-
-                        // Display Modal
-                        $('#modal-dialog').modal('show'); 
-                        $('#btnYes').click(function() {
-                            console.log(response.form);
-                            // handle form processing here
-                            $('#' + response.form).submit();
-                        });
-                    }
-                });
-            }
+                            // Display Modal
+                            $('#modal-dialog').modal('show'); 
+                            $('#btnYes').click(function() {
+                                console.log(response.form);
+                                // handle form processing here
+                                $('#' + response.form).submit();
+                            });
+                        }
+                    });
+                }
+                
+            });
             
         });
         
-    });
+
     </script>
 @endpush

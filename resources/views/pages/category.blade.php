@@ -51,7 +51,7 @@
                 @endphp
                 @forelse ($products as $product)    
                 <div class="col-6 col-md-4 col-lg-3" data-aos="fade-up" data-aos-delay="{{ $incrementProduct += 100 }}">
-                    <a href="{{ route('detail', $product->id) }}" class="component-products d-block">
+                    <a href="{{ route('detail', $product->slug) }}?user={{ $product->user->name }}" class="component-products d-block">
                         <div class="products-thumbnail">
                         <div 
                             class="products-image" 

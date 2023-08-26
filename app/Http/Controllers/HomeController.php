@@ -16,7 +16,9 @@ class HomeController extends Controller
     public function index()
     {
         $data['categories'] = Category::take(6)->get();
-        $data['products']   = Product::with(['galleries', 'user'])->where('stock', '!=', 0)->get();
+        $data['products']   = Product::with(['galleries'])
+                                        ->whereHas('user', fn($query) => $query->where('store_status', 1))
+                                        ->where('stock', '!=', 0)->get();
         return view('pages.home', $data);
     }
 }

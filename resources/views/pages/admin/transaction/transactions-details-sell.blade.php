@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 
 @section('title')
     Transactions Details
@@ -66,7 +66,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-7">
-                                                <form action="{{ route('transactions-sell-update', $sell->transaction->id) }}" method="POST">
+                                                <form action="{{ route('admin-transactions-sell-update', $sell->transaction->id) }}" method="POST">
                                                         <div class="row">
                                                             <div class="col-12">
                                                                 <div class="row">

@@ -16,7 +16,7 @@
             <a href="{{ route('categories') }}" class="nav-link">Categories</a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">Rewards</a>
+            <a href="{{ route('rewards') }}" class="nav-link">Rewards</a>
           </li>
           @guest  
           <li class="nav-item">
@@ -52,9 +52,13 @@
                 @else
                 <a href="{{ route('dashboard') }}" class="dropdown-item">Dashboard</a>
                 @endif
-                <a href="{{ route('dashboard-settings') }}" class="dropdown-item"
-                  >Settings</a
-                >
+
+                @if (auth()->user()->roles == 'ADMIN')
+                <a href="{{ route('admin-settings') }}" class="dropdown-item">Settings</a>
+                @else
+                <a href="{{ route('dashboard-settings') }}" class="dropdown-item">Settings</a>
+                @endif
+                
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('logout') }}" 
                   onclick="event.preventDefault();
@@ -86,11 +90,11 @@
           <ul class="navbar-nav d-block d-lg-none">
             <li class="nav-item">
               @if (auth()->user()->roles == 'ADMIN')
-                <a href="{{ route('dashboard-settings') }}" class="nav-link">
+                <a href="{{ route('admin-dashboard') }}" class="nav-link">
               @else
-                <a href="{{ route('dashboard-settings') }}" class="nav-link">
+                <a href="{{ route('dashboard') }}" class="nav-link">
               @endif
-                {{ auth()->user()->name }}
+                Dashboard
               </a>
             </li>
             <li class="nav-item">

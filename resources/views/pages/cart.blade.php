@@ -69,14 +69,16 @@
                                                     </td>
                                                     <td style="width: 20%;">
                                                         <div class="product-title d-flex">
-                                                            <a href="{{ route('cart-decrease-qty', $cart->id) }}" class="mr-2">-</a>
+                                                            {{-- <a href="{{ route('cart-decrease-qty', $cart->id) }}" class="mr-2">-</a> --}}
                                                             <input
+                                                                    id="cart{{ $cart->id }}"
                                                                     type="number"
                                                                     name="qty" 
                                                                     class="form-control w-50 text-center"
+                                                                    min="0"
                                                                     value="{{ $cart->qty }}"
-                                                                    disabled/>
-                                                            <a href="{{ route('cart-add-qty', $cart->id) }}" class="ml-2">+</a>
+                                                                    @change="checkStockApi({{ $cart->id }}, $event)"/>
+                                                            {{-- <a href="{{ route('cart-add-qty', $cart->id) }}" class="ml-2">+</a> --}}
                                                         </div>
                                                     </td>
                                                     <td style="width: 20%;">
@@ -132,3 +134,52 @@
 
     </div>
 @endsection
+
+@push('prepend-script')
+    <script src="/vendor/vue/vue.js"></script>
+    <script src="https://unpkg.com/vue-toasted"></script>
+    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+@endpush
+
+@push('addon-script')
+    <script>
+        Vue.use(Toasted);
+
+        var register = new Vue({
+            el: '#cartTable',
+            mounted() {
+                AOS.init();
+            },
+            methods: {
+                checkStockApi: function(id, e) {
+                    const result = document.querySelector('#cart' + id);
+                    var self = this;
+                    axios.get('/api/stock/check?id=' + id + '&qty=' + e.target.value)
+                    .then(function (response){
+                        if(response.data.check == 'Unavailable') {
+                            self.$toasted.error(
+                            "Qty melebihi batas stock yang tersedia !",
+                            {
+                                position: "top-center",
+                                className: "rounded",
+                                duration: 5000
+                            }
+                            );
+                            result.value = response.data.qty
+                        }
+                        else if(response.data.check == 'Redirect') {
+                            window.location.reload();
+                        }
+                    });
+                }
+            },
+        });
+
+        // function checkStockApi(id, value) {
+        //     const result = document.querySelector('#cart' + id);
+        //     fetch('/api/stock/check?id=' + id + '&qty=' + value)
+        //     .then(response => response.json())
+        //     .then(data => result.value = data.qty)
+        // }
+    </script>
+@endpush

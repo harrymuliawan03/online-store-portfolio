@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
 use Illuminate\Http\Request;
 
+use App\Models\Transaction;
 use App\Models\TransactionDetail;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,22 +22,24 @@ class DashboardTransactionsBuyController extends Controller
                 ->addColumn('action', function($item) {
                     return '
                         <div class="btn-group">
-                            <a href="'. route('transactions-buy-detail', $item->id) .'" class="btn btn-primary border-0 mr-1"> > </a>
+                            <a href="'. route('transactions-buy-detail', $item->transaction->id) .'" class="btn btn-primary border-0 mr-1"> > </a>
                         </div>
                     ';
                 })
                 ->editColumn('image', function($item) {
-                    return $item->product->galleries->first() ? '<img src="'. Storage::url($item->product->galleries->first()->photos) .'" style="max-height: 40px;"/>' : '';
+                    if($item->product->galleries->count()) {
+                        return '<img src="'. Storage::url($item->product->galleries->first()->photos) .'" style="max-height: 40px;"/>';
+                    }
                 })
                 ->editColumn('product_name', function($item) {
                     return $item->product->name;
                 })
                 ->editColumn('total_products', function($item) {
-                    $total = TransactionDetail::where('products_id', $item->products_id)->where('transactions_id', $item->transactions_id)->get()->count();
+                    $total = TransactionDetail::where('transactions_id', $item->transactions_id)->get()->count();
                     return '<p class="text-center">'. $total .'</p>';
                 })
                 ->editColumn('total_amount', function($item) {
-                    return $item->transaction->total_price;
+                    return 'Rp. '. number_format($item->transaction->total_price) .'';
                 })
                 ->editColumn('created_at', function($item) {
                     return $item->created_at->format('d-M-Y') ;
@@ -71,8 +73,9 @@ class DashboardTransactionsBuyController extends Controller
     }
     public function detail($id)
     {
-        $data['buy'] = TransactionDetail::with(['transaction.user', 'product.galleries'])->findOrFail($id);
+        $data['buy'] = TransactionDetail::with(['transaction.user', 'product.galleries'])->where('transactions_id', $id)->firstOrFail();
         $data['details'] = TransactionDetail::with(['transaction', 'product.galleries'])
+                                                ->where('transactions_id', $id)
                                                 ->whereHas('product', fn($query) => $query->where('users_id', '!=', auth()->user()->id))
                                                 ->whereHas('transaction', fn($query) => $query->where('users_id', auth()->user()->id))->get();
         return view('pages.dashboard-transactions-details-buy', $data);
