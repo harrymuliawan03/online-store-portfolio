@@ -73,7 +73,7 @@
                                     <table class="table-hover scroll-horizontal-vertical w-100" id="crudTable">
                                         <thead>
                                             <tr>
-                                                <th><h2>{{ $user->store_name }}</h2></th>
+                                                <th colspan="2"><h2>{{ $user->store_name }}</h2></th>
                                                 <th colspan="8" class="text-right">
                                                     <span class="btn btn-danger position-relative">Belum diproses <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">{{ $belum_proses }}</span></span>
 
@@ -128,7 +128,7 @@
                         name: 'action',
                         orderable: false,
                         searcable: false,
-                        width: '15%'
+                        width: '5%'
                     },
                 ],
             });

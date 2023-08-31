@@ -33,7 +33,7 @@
                     @php
                         $totalPrice = 0
                     @endphp
-                        @if(isset($stores))
+                        @if($stores->count() > 0)
                             @foreach ($stores as $store)
                                 <thead>
                                 <tr>
@@ -96,11 +96,11 @@
                                                 @endphp
                                             @endif
                                         @empty
-                                        <tr>
-                                            <td colspan="4" class="text-center align-item-center">
-                                                <h4 class="my-3">No Product Found in Cart</h4>
-                                            </td>
-                                        </tr>
+                                            <tr>
+                                                <td colspan="4" class="text-center align-item-center">
+                                                    <h4 class="my-3">No Product Found in Cart</h4>
+                                                </td>
+                                            </tr>
                                         @endforelse
                                     @else
                                         <tr>
@@ -112,13 +112,21 @@
                                     <tr>
                                             <td colspan="5" align="right">
                                                 <form action="{{ route('checkout', $store->store_id) }}">
-                                                    <button class="btn btn-primary px-4 py-2" :disabled="this.stock_unavailable">Checkout</button>
+                                                    <button class="btn btn-primary px-4 py-2">Checkout</button>
                                                 </form>
                                             </td>
                                     </tr>
                                 </tbody>
                                 @endforeach
                             </table>
+                            @if($stores->count() > 1)
+                            <div class="row mt-5">
+                                <div class="col-12 text-center">
+                                    <a href="{{ route('checkout-all', auth()->user()->id) }}" class="btn btn-secondary py-2">&#9989; Checkout All</a>
+                                </div>
+                            </div>
+                            @endif
+                            
                         @endif
                     @if($stores->count() == 0)
                     <div class="row">

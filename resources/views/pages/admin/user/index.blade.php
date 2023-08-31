@@ -94,30 +94,17 @@
 
         $('#crudTable').on('click','.modalDelete',function(){
                 var id = $(this).attr('data-id');
-                if(id > 0){
-                    // AJAX request
-                    var url = "{{ route('getUserName',[':id']) }}";
-                    url = url.replace(':id',id);
-                    $('#modal-dialog p span').empty();
-                    $.ajax({
-                        url: url,
-                        dataType: 'json',
-                        success: function(response){
-                            // Add employee details
-                            $('#modal-dialog p span').html(response.html);
-                            
-
-                            // Display Modal
-                            $('#modal-dialog').modal('show'); 
-                            $('#btnYes').click(function() {
-                                console.log(response.form);
-                                // handle form processing here
-                                $('#' + response.form).submit();
-                            });
-                        }
-                    });
-                }
+                var name = $(this).attr('data-name');
+                $('#modal-dialog p span').empty();
+                $('#modal-dialog p span').html(name);
                 
+                // Display Modal
+                $('#modal-dialog').modal('show'); 
+                
+                $('#btnYes').click(function() {
+                    // handle form processing here
+                    $('#form' + id).submit();
+                });
             });
             
         });

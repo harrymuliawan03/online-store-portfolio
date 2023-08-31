@@ -93,12 +93,13 @@
             });
 
             $('#crudTable').on('click','.modalDelete',function(){
+                const id = $(this).attr('data-id');
                 $('#modal-dialog').modal('show');
                 
-            });
-            $('#btnYes').click(function() {
-                // handle form processing here
-                $('form').submit();
+                $('#btnYes').click(function() {
+                    // handle form processing here
+                    $('#form' + id ).submit();
+                });
             });
             
         });

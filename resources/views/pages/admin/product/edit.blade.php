@@ -30,7 +30,7 @@
                                 <form action="{{ route('product.update', $item->id) }}" method="POST">
                                     @method('PUT')
                                     @csrf
-                                    <input type="hidden" name="users_id" value="1">
+                                    <input type="hidden" name="stock" value="{{ $item->stock }}">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">

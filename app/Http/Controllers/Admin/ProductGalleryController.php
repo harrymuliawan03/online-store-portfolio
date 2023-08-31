@@ -27,7 +27,7 @@ class ProductGalleryController extends Controller
                 ->addColumn('action', function($item) {
                     return '
                         <div class="btn-group">
-                            <form action="'. route('product-gallery.destroy', $item->id) .'" method="POST">
+                            <form action="'. route('product-gallery.destroy', $item->id) .'" id="form'. $item->id .'" method="POST">
                                         '. method_field('delete') . csrf_field() .'
                                         <button type="button" class="btn btn-danger border-0 modalDelete" data-id="'. $item->id .'">Delete</button>
                             </form>

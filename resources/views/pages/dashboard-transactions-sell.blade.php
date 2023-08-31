@@ -78,7 +78,7 @@
                         name: 'action',
                         orderable: false,
                         searcable: false,
-                        width: '15%'
+                        width: '5%'
                     },
                 ]
             });

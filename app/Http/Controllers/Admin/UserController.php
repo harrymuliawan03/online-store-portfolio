@@ -26,7 +26,7 @@ class UserController extends Controller
                                 <a href="'. route('user.edit', $item->id) .'" class="btn btn-primary border-0 mr-1">Edit</a>
                                 <form action="'. route('user.destroy', $item->id) .'" method="POST" id="form'. $item->id .'">
                                             '. method_field('delete') . csrf_field() .'
-                                            <button type="button" class="btn btn-danger border-0 modalDelete" data-id="'. $item->id .'">Delete</button>
+                                            <button type="button" class="btn btn-danger border-0 modalDelete" data-name="'. $item->name .'" data-id="'. $item->id .'">Delete</button>
                                 </form>
                             </div>
                         ';
@@ -109,15 +109,5 @@ class UserController extends Controller
         $item->delete();
 
         return redirect()->route('user.index');
-    }
-
-    public function getUserName($id) {
-        $item = User::findOrfail($id);
-        $html = ' "'. $item->name .'" ? ';
-        $form = 'form'. $item->id .'';
-
-        $response['html'] = $html;
-        $response['form'] = $form;
-        return response()->json($response);
     }
 }

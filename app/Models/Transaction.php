@@ -20,6 +20,7 @@ class Transaction extends Model
         'awb',
         'total_price',
         'code',
+        'code_checkout_all',
     ];
 
     protected $hidden = [

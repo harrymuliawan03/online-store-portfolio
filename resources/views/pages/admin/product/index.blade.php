@@ -96,27 +96,13 @@
             });
 
             $('#crudTable').on('click','.modalDelete',function(){
-            var id = $(this).attr('data-id');
+                var id = $(this).attr('data-id');
+                $('#modal-dialog').modal('show'); 
 
-            if(id > 0){
-                // AJAX request
-                var url = "{{ route('getFormProduct',[':id']) }}";
-                url = url.replace(':id',id);
-                $.ajax({
-                    url: url,
-                    dataType: 'json',
-                    success: function(response){
-                        // Display Modal
-                        $('#modal-dialog').modal('show'); 
-                        $('#btnYes').click(function() {
-                            console.log(response.form);
-                            // handle form processing here
-                            $('#' + response.form).submit();
-                        });
-                    }
+                $('#btnYes').click(function() {
+                    // handle form processing here
+                    $('#form' + id).submit();
                 });
-            }
-            
             });
         })
 

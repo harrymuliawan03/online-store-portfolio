@@ -104,7 +104,6 @@ class ProductController extends Controller
     {
         $data = $request->all();
         $item = Product::findOrFail($id);
-        
         $data['slug'] = Str::slug($request->name);
         
         $item->update($data);
@@ -139,11 +138,4 @@ class ProductController extends Controller
         return redirect()->route('product.index');
     }
 
-    public function getFormProduct($id) {
-        $item = Product::findOrfail($id);
-        $form = 'form'. $item->id .'';
-        
-        $response['form'] = $form;
-        return response()->json($response);
-    }
 }

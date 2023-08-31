@@ -14,6 +14,7 @@ class CartController extends Controller
         $data['stores'] =  Cart::where('users_id', auth()->user()->id)->get()->unique('store_id');
         // $data['stores'] =  Cart::whereHas('user', fn($query) => $query->where('id', auth()->user()->id));
         $data['user'] = User::with(['provinces', 'regency'])->findOrFail(auth()->user()->id);
+        // dd($data['user']->name);
         
         return view('pages.cart', $data);
     }
@@ -23,7 +24,7 @@ class CartController extends Controller
         $cart = Cart::findOrFail($id);
         
         $cart->delete();
-
+        
         return redirect()->route('cart');
     }
 

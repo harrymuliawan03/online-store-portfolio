@@ -30,75 +30,79 @@
             <div class="row" data-aos="fade-up" data-aos-delay="100">
                 <div class="col-12 table-responsive">
                     <table class="table table-borderless table-cart" id="cartTable">
-                        <thead>
-                          <tr>
-                              <td colspan="4" class=" text-center"><h1>{{ $carts[0]->store->store_name }}</h1></td>
-                          </tr>
-                            <tr>
-                                <td>Image</td>
-                                <td>Name &amp; Seller</td>
-                                <td>Qty</td>
-                                <td>Sub Total</td>
-                                <td>Menu</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                            $totalPrice = 0
-                            @endphp
-                            @if(isset($carts))
-                            @forelse ($carts as $cart)
-                            <tr>
-                                <td style="width: 20%;">
-                                    @if($cart->product->galleries->count())
-                                    <img src="{{ Storage::url($cart->product->galleries->first()->photos) }}" alt=""
-                                        class="cart-image">
-                                    @else
-                                    {{-- <img alt="" class="cart-image" style="background: #ddd"> --}}
-                                    <p>No Picture</p>
-                                    @endif
-                                </td>
-                                <td style="width: 35%;">
-                                    <div class="product-title">{{ $cart->product->name }}</div>
-                                    <div class="product-subtitle">by. {{ $cart->product->user->store_name }}</div>
-                                </td>
-                                <td style="width: 20%;">
-                                    <div class="product-title">{{ $cart->qty }}</div>
-                                    <div class="product-subtitle">Qty</div>
-                                </td>
-                                <td style="width: 25%;">
-                                    <div class="product-title">{{ number_format($cart->product->price * $cart->qty) }}</div>
-                                    <div class="product-subtitle">Rp.</div>
-                                </td>
-                                <td style="width: 20%;">
-                                    <form action="{{ route('checkout-delete', $cart->id) }}" method="POST" id="deleteCart{{ $cart->id }}">
-                                        @method('DELETE')
-                                        @csrf
-                                        <input type="hidden" name="url" value="checkout">
-                                        <button type="button" class="btn btn-remove-cart modalDelete" data-id="{{ $cart->id }}">
-                                            Remove
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @php
-                            $totalPrice += $cart->product->price * $cart->qty
-                            @endphp
-                            @empty
-                            <tr>
-                                <td colspan="4" class="text-center align-item-center">
-                                    <h4 class="my-3">No Product Found in Cart</h4>
-                                </td>
-                            </tr>
-                            @endforelse
-                            @else
-                            <tr>
-                                <td colspan="4" class="text-center align-item-center">
-                                    <h4 class="my-3">No Product Found in Cart</h4>
-                                </td>
-                            </tr>
-                            @endif
-                        </tbody>
+                        @php
+                        $totalPrice = 0
+                        @endphp
+                        @foreach ($stores as $store)
+                            <thead>
+                                <tr>
+                                    <td colspan="4" class=" text-center"><h1>{{ $store->store->store_name }}</h1></td>
+                                </tr>
+                                <tr>
+                                    <td>Image</td>
+                                    <td>Name &amp; Seller</td>
+                                    <td>Qty</td>
+                                    <td>Sub Total</td>
+                                    <td>Menu</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($carts))
+                                    @forelse ($carts as $cart)
+                                        @if ($cart->product->users_id == $store->store_id)
+                                            <tr>
+                                                <td style="width: 20%;">
+                                                    @if($cart->product->galleries->count())
+                                                    <img src="{{ Storage::url($cart->product->galleries->first()->photos) }}" alt=""
+                                                        class="cart-image">
+                                                    @else
+                                                    {{-- <img alt="" class="cart-image" style="background: #ddd"> --}}
+                                                    <p>No Picture</p>
+                                                    @endif
+                                                </td>
+                                                <td style="width: 35%;">
+                                                    <div class="product-title">{{ $cart->product->name }}</div>
+                                                    <div class="product-subtitle">by. {{ $cart->product->user->store_name }}</div>
+                                                </td>
+                                                <td style="width: 20%;">
+                                                    <div class="product-title">{{ $cart->qty }}</div>
+                                                    <div class="product-subtitle">Qty</div>
+                                                </td>
+                                                <td style="width: 25%;">
+                                                    <div class="product-title">{{ number_format($cart->product->price * $cart->qty) }}</div>
+                                                    <div class="product-subtitle">Rp.</div>
+                                                </td>
+                                                <td style="width: 20%;">
+                                                    <form action="{{ route('checkout-delete', $cart->id) }}" method="POST" id="deleteCart{{ $cart->id }}">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                        <input type="hidden" name="url" value="checkout-all">
+                                                        <button type="button" class="btn btn-remove-cart modalDelete" data-id="{{ $cart->id }}">
+                                                            Remove
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            @php
+                                            $totalPrice += $cart->product->price * $cart->qty
+                                            @endphp
+                                        @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center align-item-center">
+                                                <h4 class="my-3">No Product Found in Cart</h4>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @else
+                                <tr>
+                                    <td colspan="4" class="text-center align-item-center">
+                                        <h4 class="my-3">No Product Found in Cart</h4>
+                                    </td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        @endforeach
                     </table>
                 </div>
             </div>
@@ -111,7 +115,7 @@
                 </div>
             </div>
             {{-- Form locations --}}
-            <form action="{{ route('checkout-process') }}" method="POST" enctype="multipart/form-data" id="locations">
+            <form action="{{ route('checkout-process-all', auth()->user()->id) }}" method="POST" enctype="multipart/form-data" id="locations">
                 @csrf
                 <input type="hidden" name="total_price" value="{{ $totalPrice }}">
                 <div class="row mb-2" data-aos="fade-up" data-aos-delay="200">

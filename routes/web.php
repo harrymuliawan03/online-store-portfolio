@@ -54,7 +54,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/getFormCart/{id}', [CartController::class, 'getFormCart'])->name('getFormCart');
     Route::delete('/cart/{id}', [CartController::class, 'delete'])->name('cart-delete');
     Route::get('/checkout/{id}', [CheckoutController::class, 'index'])->name('checkout');
+    Route::get('/checkout-all/{id}', [CheckoutController::class, 'all'])->name('checkout-all');
+    Route::delete('/cart-checkout-delete/{id}', [CheckoutController::class, 'delete'])->name('checkout-delete');
     Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout-process');
+    Route::post('/checkout/process-all', [CheckoutController::class, 'processAll'])->name('checkout-process-all');
 });
 
 Route::group(['middleware' => ['auth', 'user']], function() {
@@ -92,9 +95,7 @@ Route::prefix('admin')
         Route::get('/', [AdminDashboardController::class, 'index'])->name('admin-dashboard');
         Route::resource('category', AdminCategoryController::class);
         Route::resource('user', UserController::class);
-        Route::get('/getUserName/{id}', [UserController::class, 'getUserName'])->name('getUserName');
         Route::resource('product', ProductController::class);
-        Route::get('/getFormProduct/{id}', [ProductController::class, 'getFormProduct'])->name('getFormProduct');
         Route::resource('product-gallery', ProductGalleryController::class)->only(['index', 'create', 'store', 'destroy']);
 
         Route::get('/transactions/sell', [AdminTransactionsSellController::class, 'index'])->name('admin-transactions-sell');
